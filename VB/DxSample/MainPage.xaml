@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="DxSample.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxp="http://schemas.devexpress.com/winfx/2008/xaml/printing"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:local="clr-namespace:DxSample"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="400">
+
+    <UserControl.DataContext>
+        <local:PersonsViewModel/>
+    </UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <local:PrintGroupSummaryConverter x:Key="PrintGroupSummaryConverter"/>
+        
+        <DataTemplate x:Key="isFirstTemplate">
+            <dxe:TextEdit EditValue="{Binding Path=RowData.GroupValue.DisplayText}" x:Name="item" Width="{Binding Path=(dxg:GridPrintingHelper.PrintCellInfo).PrintColumnWidth}" IsPrintingMode="True" Background="#FFDCDCDC" FontSize="10" TextWrapping="Wrap" ShowBorder="True" FontWeight="Normal" dxp:ExportSettings.BorderThickness="1,0,0,1" HorizontalContentAlignment="Left"/>
+        </DataTemplate>
+        <DataTemplate x:Key="isLastTemplate">
+            <dxe:TextEdit EditValue="{Binding Mode=OneWay, Converter={StaticResource PrintGroupSummaryConverter}}" x:Name="item" Width="{Binding Path=(dxg:GridPrintingHelper.PrintCellInfo).PrintColumnWidth}" IsPrintingMode="True" Background="#FFDCDCDC" FontSize="9" TextWrapping="Wrap" ShowBorder="True" FontWeight="Bold" dxp:ExportSettings.BorderThickness="0,0,1,1" HorizontalContentAlignment="Right"/>
+        </DataTemplate>
+        <DataTemplate x:Key="isMiddleColumn">
+            <dxe:TextEdit EditValue="{Binding Mode=OneWay, Converter={StaticResource PrintGroupSummaryConverter}}" x:Name="item" Width="{Binding Path=(dxg:GridPrintingHelper.PrintCellInfo).PrintColumnWidth}" IsPrintingMode="True" Background="#FFDCDCDC" FontSize="9" TextWrapping="Wrap" ShowBorder="True" FontWeight="Bold" dxp:ExportSettings.BorderThickness="0,0,0,1" HorizontalContentAlignment="Right"/>
+        </DataTemplate>
+        
+        <local:ColumnTemplateSelector x:Key="selector" IsFirstColumnTemplate="{StaticResource isFirstTemplate}" IsLastColumnTemplate="{StaticResource isLastTemplate}" IsMiddleColumnTemplate="{StaticResource isMiddleColumn}"/>
+        
+        <ControlTemplate x:Key="rowMarginTemplate">
+            <dxe:TextEdit Name="PART_Edit" Style="{Binding Path=Content.(dxg:GridPrintingHelper.PrintRowInfo).PrintGroupRowStyle}" Background="Transparent" BorderThickness="{Binding Path=Content.(dxg:GridPrintingHelper.PrintRowInfo).PrintDataIndentBorderThickness}" Margin="{Binding Path=Content.(dxg:GridPrintingHelper.PrintRowInfo).PrintDataIndentMargin}" Width="{Binding Path=Content.(dxg:GridPrintingHelper.PrintRowInfo).PrintDataIndent}">
+                <dxp:ExportSettings.OnPageUpdater>
+                    <dxg:LastOnPageUpdater />
+                </dxp:ExportSettings.OnPageUpdater>
+            </dxe:TextEdit>
+        </ControlTemplate>
+
+        <DataTemplate x:Key="CustomPrintGroupRowTemplate">
+            <StackPanel Orientation="Horizontal">
+                <dxg:CellFillControl Template="{StaticResource rowMarginTemplate}" />
+                <Grid>
+                    <dxg:GroupRowContentControl>
+                        <dxg:GroupRowContentControl.Template>
+                            <ControlTemplate>
+                                <local:ExtItemsControl ItemTemplateSelector="{StaticResource selector}" ItemsSource="{Binding Path=Content.CellData}" Width="{Binding Path=Content.(dxg:GridPrintingHelper.PrintRowInfo).TotalHeaderWidth}">
+                                    <local:ExtItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </local:ExtItemsControl.ItemsPanel>
+                                </local:ExtItemsControl>
+                            </ControlTemplate>
+                        </dxg:GroupRowContentControl.Template>
+                    </dxg:GroupRowContentControl>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <dxp:DocumentPreview Grid.Column="1" Name="documentPreview" />
+        <dxg:GridControl Grid.Column="0" AutoPopulateColumns="True" Name="gridControl1" ItemsSource="{Binding Persons}">
+            <dxg:GridControl.GroupSummary>
+                <dxg:GridSummaryItem FieldName="Age" SummaryType="Average"/>
+                <dxg:GridSummaryItem FieldName="Weight" SummaryType="Max"/>
+            </dxg:GridControl.GroupSummary>
+            <dxg:GridControl.View>
+                <dxg:TableView Name="view" AutoWidth="True" PrintGroupRowTemplate="{StaticResource CustomPrintGroupRowTemplate}"/>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+    </Grid>
+</UserControl>
