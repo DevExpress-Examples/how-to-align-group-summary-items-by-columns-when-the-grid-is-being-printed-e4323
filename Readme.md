@@ -6,7 +6,7 @@
 * [ColumnTemplateSelector.cs](./CS/DxSample/ColumnTemplateSelector.cs) (VB: [ColumnTemplateSelector.vb](./VB/DxSample/ColumnTemplateSelector.vb))
 * [ExtItemsControl.cs](./CS/DxSample/ExtItemsControl.cs) (VB: [ExtItemsControl.vb](./VB/DxSample/ExtItemsControl.vb))
 * [MainPage.xaml](./CS/DxSample/MainPage.xaml) (VB: [MainPage.xaml](./VB/DxSample/MainPage.xaml))
-* [MainPage.xaml.cs](./CS/DxSample/MainPage.xaml.cs) (VB: [MainPage.xaml](./VB/DxSample/MainPage.xaml))
+* [MainPage.xaml.cs](./CS/DxSample/MainPage.xaml.cs) (VB: [MainPage.xaml.vb](./VB/DxSample/MainPage.xaml.vb))
 * [PersonsViewModel.cs](./CS/DxSample/PersonsViewModel.cs) (VB: [PersonsViewModel.vb](./VB/DxSample/PersonsViewModel.vb))
 * [PrintGroupSummaryConverter.cs](./CS/DxSample/PrintGroupSummaryConverter.cs) (VB: [PrintGroupSummaryConverter.vb](./VB/DxSample/PrintGroupSummaryConverter.vb))
 <!-- default file list end -->
